@@ -1,7 +1,4 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.postgres.indexes import GinIndex
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -83,7 +80,7 @@ class NotificationTemplate(models.Model):
             models.Index(fields=["priority"], name="idx_notif_templ_priority"),
             GinIndex(fields=["recipients"], name="idx_notif_templ_recip_gin"),
         ]
-        
+
     @classmethod
     def create(cls, data) -> "NotificationTemplate":
         try:

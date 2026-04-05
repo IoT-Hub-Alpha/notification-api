@@ -1,6 +1,7 @@
 from django.http import HttpRequest
 from typing import TypedDict, Optional
 
+
 class JWTPayload(TypedDict, total=False):
     user_id: int
     email: str

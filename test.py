@@ -1,7 +1,7 @@
 import jwt
 from datetime import datetime, timedelta, timezone
 
-key = r'thisisanunsecurekey'
+key = r"thisisanunsecurekey"
 
 payload = {
     "user_id": 1,

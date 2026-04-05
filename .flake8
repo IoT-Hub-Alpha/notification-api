@@ -9,4 +9,7 @@ exclude =
     src/config/,
     **/migrations/**,
     venv,
+    .venv,
+    **/settings.py,
+    **/settings_test.py,
     tests

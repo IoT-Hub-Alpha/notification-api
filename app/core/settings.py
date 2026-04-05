@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -22,7 +23,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "UNSECURE KEY")
 
 DEBUG = True if os.getenv("DEBUG", "False").lower() in [1, "yes", "true"] else False
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTES", ("notification-api,localhost,127.0.0.1")).split(",")
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTES", ("notification-api,localhost,127.0.0.1")
+).split(",")
 
 
 # Application definition
@@ -45,7 +48,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "iot_logging.django_helpers.RequestContextMiddleware",
-    "core.middleware.JWThandle.JWTAuthMiddleware",
+    "iot_auth.django.JWTAuthMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -130,21 +133,21 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'json': {
-            '()': 'iot_logging.StructuredJsonFormatter',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "json": {
+            "()": "iot_logging.StructuredJsonFormatter",
         },
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'json',
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
     },
 }

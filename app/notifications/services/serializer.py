@@ -6,10 +6,11 @@ from django.forms.models import model_to_dict
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
+
 @dataclass
 class NotifTemplateSerializer:
     instance: Optional[NotificationTemplate] = None
-    
+
     read_fields = (
         "id",
         "name",
@@ -17,27 +18,30 @@ class NotifTemplateSerializer:
         "recipients",
         "priority",
         "retry_count",
-        "retry_delay",
+        "retry_delay_minutes",
         "is_active",
-        "created_at"
+        "created_at",
     )
-    
+
     def to_dict(self) -> dict[str, Any]:
         if self.instance is None:
-            raise ValueError("NotifTemplateSerializer(instance=...) is required for to_dict()")
-        
+            raise ValueError(
+                "NotifTemplateSerializer(instance=...) is required for to_dict()"
+            )
+
         payload = model_to_dict(self.instance, fields=self.read_fields)
-        
+
         for k in ("created_at", "updated_at"):
             dt = getattr(self.instance, k, None)
             payload[k] = dt.isoformat() if dt else None
-            
+
         return payload
-    
+
+
 @dataclass
 class NotifDeliverySerializer:
     instance: Optional[NotificationDelivery] = None
-    
+
     read_fields = (
         "id",
         "event",
@@ -51,33 +55,35 @@ class NotifDeliverySerializer:
         "last_attempt_at",
         "error_message",
         "sent_at",
-        "created_at"
+        "created_at",
     )
-    
+
     def to_dict(self) -> dict[str, Any]:
         if self.instance is None:
-            raise ValueError("NotifDeliverySerializer(instance=...) is required for to_dict()")
-        
+            raise ValueError(
+                "NotifDeliverySerializer(instance=...) is required for to_dict()"
+            )
+
         payload = model_to_dict(self.instance, fields=self.read_fields)
-        
+
         for k in ("sent_at", "created_at", "last_attempt_at"):
             dt = getattr(self.instance, k, None)
             payload[k] = dt.isoformat() if dt else None
-            
+
         return payload
-    
+
 
 def template_update(instance, data: dict[str, Any]) -> "NotificationTemplate":
     ALLOWED_FIELDS_UPDATE = {
-    "name",
-    "message",
-    "recipients",
-    "priority",
-    "retry_count",
-    "retry_delay_minutes",
-    "is_active",
-}
-    
+        "name",
+        "message_template",
+        "recipients",
+        "priority",
+        "retry_count",
+        "retry_delay_minutes",
+        "is_active",
+    }
+
     if not isinstance(data, dict):
         raise TypeError("data must be a dictionary")
 
@@ -96,7 +102,7 @@ def template_update(instance, data: dict[str, Any]) -> "NotificationTemplate":
         with transaction.atomic():
             instance.save(update_fields=update_fields)
     except ValidationError as exc:
-        raise ApiValidationError({"errors": "validation error"} , status_code=400)
+        raise ApiValidationError({"errors": f"validation error {exc}"}, status_code=400)
     except IntegrityError as exc:
         raise ApiValidationError(
             {"errors": [f"Database integrity error: {exc}"]}
