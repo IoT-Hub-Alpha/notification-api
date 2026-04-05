@@ -6,5 +6,5 @@ until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME"; do
   sleep 2
 done
 
-python manage.py migrate
-python manage.py runserver 0.0.0.0:8015
+python app/manage.py migrate
+python app/manage.py runserver 0.0.0.0:8015
