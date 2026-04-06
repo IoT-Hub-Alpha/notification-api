@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "UNSECURE KEY")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-shared-django-secret-development-token")
 
 DEBUG = True if os.getenv("DEBUG", "False").lower() in [1, "yes", "true"] else False
 
@@ -53,6 +53,22 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "core.urls"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_NAME = "iot_sessionid"
+
+SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = False
 
 TEMPLATES = [
     {
