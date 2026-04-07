@@ -191,3 +191,8 @@ class NotificationDeliveryListView(CheckPermissionsMixin, View):
             response,
             status=200,
         )
+
+@method_decorator(csrf_exempt, name="dispatch")
+class GetHealth(View):
+    def get(self, request: HttpRequest) -> JsonResponse:
+        return JsonResponse({"detail": "ok"})
