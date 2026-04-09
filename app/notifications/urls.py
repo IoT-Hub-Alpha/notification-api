@@ -14,7 +14,7 @@ urlpatterns = [
         name="Notification_delivery_view",
     ),
     path(
-        "/health",
+        "health",
         GetHealth.as_view(),
         name="get_health"
     )
